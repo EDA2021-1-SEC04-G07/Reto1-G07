@@ -34,10 +34,15 @@ se hace la solicitud al controlador para ejecutar la
 operación solicitada
 """
 
+
 def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
-    print("2- ")
+    print("2- Encontrar buenos videos por categoria y pais")
+    print("3- Encontrar video tendencia por pais")
+    print("4- Encontrar video tendencia por categoria")
+    print("5- Buscar los videos con mas Likes")
+
 
 catalog = None
 
@@ -51,7 +56,24 @@ while True:
         print("Cargando información de los archivos ....")
 
     elif int(inputs[0]) == 2:
-        pass
+        category = input("Seleccione la categoria a buscar: ")
+        country = input("Seleccione el pais a bucar: ")
+        num = input("Buscando los TOP?: ")
+        # call to controller
+
+    elif int(inputs[0]) == 3:
+        country = input("Seleccione el pais a bucar: ")
+        # call to controller
+
+    elif int(inputs[0]) == 4:
+        category = input("Seleccione la categoria a buscar: ")
+        # call to controller
+
+    elif int(inputs[0]) == 4:
+        country = input("Seleccione el pais a bucar: ")
+        num = input("Buscando los TOP?: ")
+        tag = input("Seleccione la etiqueta a buscar: ")
+        # call to controller
 
     else:
         sys.exit(0)
