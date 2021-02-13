@@ -39,6 +39,7 @@ def initCatalog():
 
 # Funciones para la carga de datos
 
+
 def loadData(catalog):
     """
     Carga los datos de los archivos y cargar los datos en la
@@ -47,14 +48,16 @@ def loadData(catalog):
     loadVideos(catalog)
     loadCategories(catalog)
 
+
 def loadVideos(catalog):
     """
     Carga los videos del archivo.
     """
-    videosfile = cf.data_dir + 'videos/videos-small.csv'
+    videosfile = cf.data_dir + 'videos/videos-large.csv'
     input_file = csv.DictReader(open(videosfile, encoding='utf-8'))
     for video in input_file:
         model.addVideo(catalog, video)
+
 
 def loadCategories(catalog):
     """

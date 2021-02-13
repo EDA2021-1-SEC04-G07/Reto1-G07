@@ -42,6 +42,8 @@ def printMenu():
     print("3- Encontrar video tendencia por pais")
     print("4- Encontrar video tendencia por categoria")
     print("5- Buscar los videos con mas Likes")
+    print("0- Salir")
+
 
 def initCatalog():
     """
@@ -70,8 +72,19 @@ while True:
         catalog = initCatalog()
         loadData(catalog)
         print('Videos cargados: ' + str(lt.size(catalog['videos'])))
-        print('Primer video: ' + str(lt.firstElement(catalog['videos'])))
-        print('Categorias cargadas: ' + str(catalog['categories']))
+        print("Primer video:")
+        first_vid = lt.firstElement(catalog['videos'])
+        print("\t Titulo:", first_vid['title'])
+        print("\t Nombre del canal:", first_vid['channel_title'])
+        print("\t Fecha de tendencia:", first_vid['trending_date'])
+        print("\t Pais:", first_vid['country'])
+        print("\t Vistas:", first_vid['views'])
+        print("\t Me gusta:", first_vid['likes'])
+        print("\t No me gusta:", first_vid['dislikes'])
+        print('Categorias cargadas:')
+        categories = catalog['categories']
+        for category in categories['elements']:
+            print("\t", category['id'], category['name'])
 
     elif int(inputs[0]) == 2:
         category = input("Seleccione la categoria a buscar: ")
@@ -87,7 +100,7 @@ while True:
         category = input("Seleccione la categoria a buscar: ")
         # call to controller
 
-    elif int(inputs[0]) == 4:
+    elif int(inputs[0]) == 5:
         country = input("Seleccione el pais a bucar: ")
         num = input("Buscando los TOP?: ")
         tag = input("Seleccione la etiqueta a buscar: ")

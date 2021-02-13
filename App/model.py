@@ -60,6 +60,7 @@ def addVideo(catalog, video):
     # Se adiciona el libro a la lista de libros
     lt.addLast(catalog['videos'], video)
 
+
 def addCategory(catalog, category):
     """
     Adiciona una categoria a la lista de categorias
