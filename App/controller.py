@@ -61,10 +61,9 @@ def loadCategories(catalog):
     Carga las categorias del archivo.
     """
     categoriesfile = cf.data_dir + 'videos/category-id.csv'
-    input_file = csv.DictReader(open(categoriesfile, encoding='utf-8'))
+    input_file = csv.DictReader(open(categoriesfile, encoding='utf-8'),delimiter='\t')
     for category in input_file:
-        print(category)
-        #model.addCategory(catalog, category)
+        model.addCategory(catalog, category)
 
 # Funciones de ordenamiento
 

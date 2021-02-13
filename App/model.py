@@ -75,7 +75,7 @@ def newCategory(name, id):
     Esta estructura almancena las categorias utilizados para marcar los videos.
     """
     cat = {'name': '', 'id': ''}
-    cat['name'] = name
+    cat['name'] = name.lstrip()
     cat['id'] = id
     return cat
 

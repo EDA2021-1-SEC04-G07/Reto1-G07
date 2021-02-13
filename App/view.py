@@ -69,8 +69,8 @@ while True:
         print("Cargando información de los archivos ....")
         catalog = initCatalog()
         loadData(catalog)
-        #print('Videos cargados: ' + str(lt.size(catalog['videos'])))
-        #print('Primer video: ' + str(lt.firstElement(catalog['videos'])))
+        print('Videos cargados: ' + str(lt.size(catalog['videos'])))
+        print('Primer video: ' + str(lt.firstElement(catalog['videos'])))
         print('Categorias cargadas: ' + str(catalog['categories']))
 
     elif int(inputs[0]) == 2:
