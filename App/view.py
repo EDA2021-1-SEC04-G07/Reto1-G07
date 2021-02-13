@@ -43,6 +43,19 @@ def printMenu():
     print("4- Encontrar video tendencia por categoria")
     print("5- Buscar los videos con mas Likes")
 
+def initCatalog():
+    """
+    Inicializa el catalogo de videos
+    """
+    return controller.initCatalog()
+
+
+def loadData(catalog):
+    """
+    Carga los videos en la estructura de datos
+    """
+    controller.loadData(catalog)
+
 
 catalog = None
 
@@ -54,6 +67,11 @@ while True:
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
+        catalog = initCatalog()
+        loadData(catalog)
+        #print('Videos cargados: ' + str(lt.size(catalog['videos'])))
+        #print('Primer video: ' + str(lt.firstElement(catalog['videos'])))
+        print('Categorias cargadas: ' + str(catalog['categories']))
 
     elif int(inputs[0]) == 2:
         category = input("Seleccione la categoria a buscar: ")
