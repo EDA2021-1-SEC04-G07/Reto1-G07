@@ -45,11 +45,11 @@ def printMenu():
     print("0- Salir")
 
 
-def initCatalog():
+def initCatalog(type:str):
     """
     Inicializa el catalogo de videos
     """
-    return controller.initCatalog()
+    return controller.initCatalog(type)
 
 
 def loadData(catalog):
@@ -58,6 +58,22 @@ def loadData(catalog):
     """
     controller.loadData(catalog)
 
+def printResults(ord_videos, sample=10):
+    size = lt.size(ord_videos)
+    if size > sample:
+        print("Los primeros ", sample, " videos según su número de vistas son:")
+        i=0
+        while i <= sample:
+            video = lt.getElement(ord_videos,i)
+            print("\t Fecha de tendencia:", video['trending_date'])
+            print("\t Titulo:", video['title'])
+            print("\t Nombre del canal:", video['channel_title'])
+            print("\t Fecha de publicación:", video['publish_time'])
+            print("\t Vistas:", video['views'])
+            print("\t Me gusta:", video['likes'])
+            print("\t No me gusta:", video['dislikes'])
+            print("\n")
+            i+=1
 
 catalog = None
 
@@ -68,8 +84,15 @@ while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
+        print("Seleccione el tipo de lista para cargar la información: ")
+        print("1) ARRAY_LIST")
+        print("2) SINGLE_LINKED")
+        tipo_lista = input("Seleccione una opción para continuar\n")
+        if int(inputs[0]) == 1:
+            catalog = initCatalog("ARRAY_LIST")
+        if int(inputs[0]) == 2:
+            catalog = initCatalog("SINGLE_LINKED")
         print("Cargando información de los archivos ....")
-        catalog = initCatalog()
         loadData(catalog)
         print('Videos cargados: ' + str(lt.size(catalog['videos'])))
         print("Primer video:")
@@ -87,10 +110,17 @@ while True:
             print("\t", category['id'], category['name'])
 
     elif int(inputs[0]) == 2:
+        size = int(input("Indique tamaño de la muestra: "))
         category = input("Seleccione la categoria a buscar: ")
         country = input("Seleccione el pais a bucar: ")
-        num = input("Buscando los TOP?: ")
-        # call to controller
+        num = int(input("Buscando los TOP?: "))
+        if size <= lt.size(catalog['videos']):
+            result = controller.sortVideos(catalog, size)
+            print("Para la muestra de", size, " elementos, el tiempo (mseg) es: ", str(result[0]))
+            printResults(result[1], num)
+        else:
+            print("El tamaño de la muestra especificado es mayor al tamaño de la lista.")
+            print("Intentelo de nuevo.")
 
     elif int(inputs[0]) == 3:
         country = input("Seleccione el pais a bucar: ")
