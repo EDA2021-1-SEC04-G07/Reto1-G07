@@ -62,7 +62,7 @@ def printResults(ord_videos, sample=10):
     size = lt.size(ord_videos)
     if size > sample:
         print("Los primeros ", sample, " videos según su número de vistas son:")
-        i=0
+        i=1
         while i <= sample:
             video = lt.getElement(ord_videos,i)
             print("\t Fecha de tendencia:", video['trending_date'])
@@ -88,9 +88,9 @@ while True:
         print("1) ARRAY_LIST")
         print("2) SINGLE_LINKED")
         tipo_lista = input("Seleccione una opción para continuar\n")
-        if int(inputs[0]) == 1:
+        if int(tipo_lista[0]) == 1:
             catalog = initCatalog("ARRAY_LIST")
-        if int(inputs[0]) == 2:
+        if int(tipo_lista[0]) == 2:
             catalog = initCatalog("SINGLE_LINKED")
         print("Cargando información de los archivos ....")
         loadData(catalog)
@@ -105,17 +105,25 @@ while True:
         print("\t Me gusta:", first_vid['likes'])
         print("\t No me gusta:", first_vid['dislikes'])
         print('Categorias cargadas:')
-        categories = catalog['categories']
-        for category in categories['elements']:
+        i=1
+        while i <= lt.size(catalog['categories']):
+            category = lt.getElement(catalog["categories"],i)
             print("\t", category['id'], category['name'])
+            i+=1
+
 
     elif int(inputs[0]) == 2:
+        print("Seleccione el tipo de algoritmo para ordenar la información: ")
+        print("1) selection")
+        print("2) insertion")
+        print("3) shell")
+        algoritmo = int(input("Seleccione una opción para continuar\n")[0])
         size = int(input("Indique tamaño de la muestra: "))
         category = input("Seleccione la categoria a buscar: ")
         country = input("Seleccione el pais a bucar: ")
         num = int(input("Buscando los TOP?: "))
         if size <= lt.size(catalog['videos']):
-            result = controller.sortVideos(catalog, size)
+            result = controller.sortVideos(catalog, size, algoritmo)
             print("Para la muestra de", size, " elementos, el tiempo (mseg) es: ", str(result[0]))
             printResults(result[1], num)
         else:

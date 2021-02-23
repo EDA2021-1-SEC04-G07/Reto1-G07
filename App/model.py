@@ -22,12 +22,14 @@
  * Contribuciones:
  *
  * Dario Correal - Version inicial
- """
+"""
 
 import time
 import config as cf
 from DISClib.ADT import list as lt
-from DISClib.Algorithms.Sorting import selectionsort as sa
+from DISClib.Algorithms.Sorting import selectionsort as sel
+from DISClib.Algorithms.Sorting import insertionsort as ins
+from DISClib.Algorithms.Sorting import shellsort as sa
 assert cf
 
 """
@@ -96,11 +98,16 @@ def cmpVideosByViews(video1, video2):
 
 # Funciones de ordenamiento
 
-def sortVideos(catalog, size):
-    sub_list = lt.subList(catalog['videos'], 0, size)
+def sortVideos(catalog, size, algoritmo):
+    sub_list = lt.subList(catalog['videos'], 1, size)
     sub_list = sub_list.copy()
     start_time = time.process_time()
-    sorted_list = sa.sort(sub_list, cmpVideosByViews)
+    if int(algoritmo) == 1:
+        sorted_list = sel.sort(sub_list, cmpVideosByViews)
+    if int(algoritmo) == 2:
+        sorted_list = ins.sort(sub_list, cmpVideosByViews)
+    if int(algoritmo) == 3:
+        sorted_list = sa.sort(sub_list, cmpVideosByViews)
     stop_time = time.process_time()
     elapsed_time_mseg = (stop_time - start_time)*1000
     return elapsed_time_mseg, sorted_list
