@@ -30,17 +30,19 @@ El controlador se encarga de mediar entre la vista y el modelo.
 """
 
 # Inicialización del Catálogo de videos
-def initCatalog(type:str):
+
+
+def initCatalog(list_type: str) -> dict:
     """
     Llama la funcion de inicializacion del catalogo del modelo.
     """
-    catalog = model.newCatalog(type)
+    catalog = model.newCatalog(list_type)
     return catalog
 
 # Funciones para la carga de datos
 
 
-def loadData(catalog):
+def loadData(catalog: dict) -> None:
     """
     Carga los datos de los archivos y cargar los datos en la
     estructura de datos
@@ -49,32 +51,34 @@ def loadData(catalog):
     loadCategories(catalog)
 
 
-def loadVideos(catalog):
+def loadVideos(catalog: dict) -> None:
     """
     Carga los videos del archivo.
     """
-    videosfile = cf.data_dir + 'videos/videos-large.csv'
-    input_file = csv.DictReader(open(videosfile, encoding='utf-8'))
-    for video in input_file:
+    directory = cf.data_dir + "videos/videos-large.csv"
+    file = csv.DictReader(open(directory, encoding="utf-8"))
+    for video in file:
         model.addVideo(catalog, video)
 
 
-def loadCategories(catalog):
+def loadCategories(catalog: dict) -> None:
     """
     Carga las categorias del archivo.
     """
-    categoriesfile = cf.data_dir + 'videos/category-id.csv'
-    input_file = csv.DictReader(open(categoriesfile, encoding='utf-8'),delimiter='\t')
-    for category in input_file:
+    directory = cf.data_dir + "videos/category-id.csv"
+    file = csv.DictReader(open(directory, encoding="utf-8"), delimiter='\t')
+    for category in file:
         model.addCategory(catalog, category)
+
 
 # Funciones de ordenamiento
 
-def sortVideos(catalog, size, algoritmo):
+
+def sortVideos(catalog: dict, size: int, algorithm: str):
     """
-    Ordena los videos por vies
+    Ordena los videos por views.
     """
-    return model.sortVideos(catalog, size, algoritmo)
+    return model.sortVideos(catalog, size, algorithm)
 
 
 # Funciones de consulta sobre el catálogo

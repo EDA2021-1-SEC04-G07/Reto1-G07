@@ -22,13 +22,14 @@
  * Contribuciones:
  *
  * Dario Correal - Version inicial
-"""
+ """
+
 
 import time
 import config as cf
 from DISClib.ADT import list as lt
-from DISClib.Algorithms.Sorting import selectionsort as sel
 from DISClib.Algorithms.Sorting import insertionsort as ins
+from DISClib.Algorithms.Sorting import selectionsort as sel
 from DISClib.Algorithms.Sorting import shellsort as sa
 assert cf
 
@@ -40,7 +41,7 @@ los mismos.
 # Construccion de modelos
 
 
-def newCatalog(type):
+def newCatalog(list_type: str) -> dict:
     """
     Inicializa el catálogo de videos. Crea una lista vacia para guardar
     todos los videos, adicionalmente, crea una lista vacia para las categorias.
@@ -48,66 +49,111 @@ def newCatalog(type):
     """
     catalog = {
         'videos': None,
-        'categories': None
+        'countries': None,
+        'categories': None,
+        'tags': None,
     }
 
-    catalog['videos'] = lt.newList(type)
-    catalog['categories'] = lt.newList(type)
+    catalog['videos'] = lt.newList(list_type, cmpfunction=None)
+    catalog['countries'] = lt.newList(list_type, cmpfunction=compare_country)
+    catalog['categories'] = lt.newList(list_type, cmpfunction=None)
+
     return catalog
 
 
 # Funciones para agregar informacion al catalogo
 
-def addVideo(catalog, video):
+
+def addVideo(catalog: dict, video: dict) -> None:
     # Se adiciona el libro a la lista de libros
     lt.addLast(catalog['videos'], video)
+    addVideoCountry(catalog, video['country'].strip(), video)
 
 
-def addCategory(catalog, category):
+def addVideoCountry(catalog: dict, country_name: str, video: dict) -> None:
+    """
+    Se agregan los videos que pertenecen a cada pais.
+    """
+    index = lt.isPresent(catalog['countries'], country_name)
+    if index > 0:
+        country = lt.getElement(catalog['countries'], index)
+    else:
+        country = newCountry(country_name)
+        lt.addLast(catalog['countries'], country)
+
+    lt.addLast(country['videos'], video)
+
+
+def addCategory(catalog: dict, category: dict) -> None:
     """
     Adiciona una categoria a la lista de categorias
     """
-    c = newCategory(category['name'], category['id'])
-    lt.addLast(catalog['categories'], c)
+    cat = newCategory(category['id'], category['name'])
+    lt.addLast(catalog['categories'], cat)
 
 
 # Funciones para creacion de datos
 
-def newCategory(name, id):
+
+def newCountry(name: str) -> dict:
+    """
+    Esta estructura almancena los paises de los videos.
+    """
+    country = {
+        'name': name,
+        'videos': lt.newList(),
+    }
+
+    return country
+
+
+def newCategory(id: int, name: str) -> dict:
     """
     Esta estructura almancena las categorias utilizados para marcar los videos.
     """
-    cat = {'name': '', 'id': ''}
-    cat['name'] = name.lstrip()
-    cat['id'] = id
-    return cat
+    category = {
+        'id': id,
+        'name': name.strip(),
+    }
+
+    return category
 
 
 # Funciones de consulta
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
-def cmpVideosByViews(video1, video2):
+
+def compare_country(country_name: str, country: dict) -> bool:
+    if country_name.lower() in country['name'].lower():
+        return 0
+    return -1
+
+
+def cmpVideosByViews(video1: dict, video2: dict) -> bool:
     """
-    Devuelve verdadero (True) si los 'views' de video1 son menores que los del video2
+    Devuelve verdadero (True) si los 'views' de video1 son menores
+    que los del video2
     Args:
     video1: informacion del primer video que incluye su valor 'views'
     video2: informacion del segundo video que incluye su valor 'views'
     """
-    return (int(video1["views"]) > int(video2["views"]))
+    return int(video1['views']) > int(video2['views'])
+
 
 # Funciones de ordenamiento
 
-def sortVideos(catalog, size, algoritmo):
+
+def sortVideos(catalog: dict, size: int, algorithm: str) -> None:
     sub_list = lt.subList(catalog['videos'], 1, size)
     sub_list = sub_list.copy()
     start_time = time.process_time()
-    if int(algoritmo) == 1:
-        sorted_list = sel.sort(sub_list, cmpVideosByViews)
-    if int(algoritmo) == 2:
+    if algorithm == 1:
         sorted_list = ins.sort(sub_list, cmpVideosByViews)
-    if int(algoritmo) == 3:
+    elif algorithm == 2:
+        sorted_list = sel.sort(sub_list, cmpVideosByViews)
+    else:
         sorted_list = sa.sort(sub_list, cmpVideosByViews)
     stop_time = time.process_time()
-    elapsed_time_mseg = (stop_time - start_time)*1000
-    return elapsed_time_mseg, sorted_list
+    elapsed_time_mseg = (stop_time - start_time) * 1000
+    return (elapsed_time_mseg, sorted_list)
