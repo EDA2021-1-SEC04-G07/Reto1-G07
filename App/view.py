@@ -132,7 +132,7 @@ while True:
                              + "\n\t3. Shell Sort\n"))
 
         size = int(input("Seleccione el tamaño de la muestra: "))
-        num = int(input("Buscando los TOP?: "))
+        # num = int(input("Buscando los TOP?: "))
         if size <= lt.size(catalog['videos']):
             result = sortVideos(catalog, size, alg_type)
             print(
@@ -140,7 +140,7 @@ while True:
                 str(result[0])
             )
 
-            printResults(result[1], num)
+            # printResults(result[1], num)
         else:
             print(
                 "El tamaño de la muestra especificado es mayor "
