@@ -30,6 +30,8 @@ from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import selectionsort as sel
 from DISClib.Algorithms.Sorting import insertionsort as ins
 from DISClib.Algorithms.Sorting import shellsort as sa
+from DISClib.Algorithms.Sorting import mergesort as merge
+from DISClib.Algorithms.Sorting import quicksort as quick
 assert cf
 
 """
@@ -40,7 +42,7 @@ los mismos.
 # Construccion de modelos
 
 
-def newCatalog(type):
+def newCatalog(type: str) -> dict:
     """
     Inicializa el catálogo de videos. Crea una lista vacia para guardar
     todos los videos, adicionalmente, crea una lista vacia para las categorias.
@@ -51,19 +53,21 @@ def newCatalog(type):
         'categories': None
     }
 
-    catalog['videos'] = lt.newList(type)
-    catalog['categories'] = lt.newList(type)
+    catalog['videos'] = lt.newList(type, cmpfunction=None)
+    catalog['categories'] = lt.newList(type, cmpfunction=None)
+    # catalog['countries'] = lt.newList(type, cmpfunction=compare_country)
     return catalog
 
 
 # Funciones para agregar informacion al catalogo
 
-def addVideo(catalog, video):
+def addVideo(catalog: dict, video: dict) -> None:
     # Se adiciona el libro a la lista de libros
     lt.addLast(catalog['videos'], video)
+    # addVideoCountry(catalog, video['country'].strip(), video)
 
 
-def addCategory(catalog, category):
+def addCategory(catalog: dict, category: dict) -> None:
     """
     Adiciona una categoria a la lista de categorias
     """
@@ -71,9 +75,24 @@ def addCategory(catalog, category):
     lt.addLast(catalog['categories'], c)
 
 
+def addVideoCountry(catalog: dict, country_name: str, video: dict) -> None:
+    """
+    Se agregan los videos que pertenecen a cada pais.
+    """
+    index = lt.isPresent(catalog['countries'], country_name)
+    if index > 0:
+        country = lt.getElement(catalog['countries'], index)
+    else:
+        country = newCountry(country_name)
+        lt.addLast(catalog['countries'], country)
+
+    lt.addLast(country['videos'], video)
+
+
 # Funciones para creacion de datos
 
-def newCategory(name, id):
+
+def newCategory(name: str, id: int) -> dict:
     """
     Esta estructura almancena las categorias utilizados para marcar los videos.
     """
@@ -83,31 +102,55 @@ def newCategory(name, id):
     return cat
 
 
+def newCountry(name: str) -> dict:
+    """
+    Esta estructura almancena los paises de los videos.
+    """
+    country = {
+        'name': name,
+        'videos': lt.newList(),
+    }
+
+    return country
+
+
 # Funciones de consulta
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
-def cmpVideosByViews(video1, video2):
+def cmpVideosByViews(video1: dict, video2: dict) -> bool:
     """
-    Devuelve verdadero (True) si los 'views' de video1 son menores que los del video2
+    Devuelve verdadero (True) si los 'views' de video1 son mayores que los del video2
     Args:
     video1: informacion del primer video que incluye su valor 'views'
     video2: informacion del segundo video que incluye su valor 'views'
     """
     return (int(video1["views"]) > int(video2["views"]))
 
+'''
+def compare_country(country_name: str, country: dict) -> bool:
+    if country_name.lower() in country['name'].lower():
+        return 0
+    return -1
+'''
+
 # Funciones de ordenamiento
 
-def sortVideos(catalog, size, algoritmo):
+
+def sortVideos(catalog: dict, size: int, algoritmo: int) -> tuple:
     sub_list = lt.subList(catalog['videos'], 1, size)
     sub_list = sub_list.copy()
     start_time = time.process_time()
     if int(algoritmo) == 1:
         sorted_list = sel.sort(sub_list, cmpVideosByViews)
-    if int(algoritmo) == 2:
+    elif int(algoritmo) == 2:
         sorted_list = ins.sort(sub_list, cmpVideosByViews)
-    if int(algoritmo) == 3:
+    elif int(algoritmo) == 3:
         sorted_list = sa.sort(sub_list, cmpVideosByViews)
+    elif int(algoritmo) == 4:
+        sorted_list = merge.sort(sub_list, cmpVideosByViews)
+    else:
+        sorted_list = quick.sort(sub_list, cmpVideosByViews)
     stop_time = time.process_time()
     elapsed_time_mseg = (stop_time - start_time)*1000
     return elapsed_time_mseg, sorted_list

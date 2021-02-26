@@ -58,11 +58,12 @@ def loadData(catalog):
     """
     controller.loadData(catalog)
 
+
 def printResults(ord_videos, sample=10):
     size = lt.size(ord_videos)
     if size > sample:
         print("Los primeros ", sample, " videos según su número de vistas son:")
-        i=1
+        i = 1
         while i <= sample:
             video = lt.getElement(ord_videos,i)
             print("\t Fecha de tendencia:", video['trending_date'])
@@ -74,6 +75,7 @@ def printResults(ord_videos, sample=10):
             print("\t No me gusta:", video['dislikes'])
             print("\n")
             i+=1
+
 
 catalog = None
 
@@ -105,22 +107,23 @@ while True:
         print("\t Me gusta:", first_vid['likes'])
         print("\t No me gusta:", first_vid['dislikes'])
         print('Categorias cargadas:')
-        i=1
+        i = 1
         while i <= lt.size(catalog['categories']):
             category = lt.getElement(catalog["categories"],i)
             print("\t", category['id'], category['name'])
-            i+=1
-
+            i += 1
 
     elif int(inputs[0]) == 2:
-        print("Seleccione el tipo de algoritmo para ordenar la información: ")
-        print("1) selection")
-        print("2) insertion")
-        print("3) shell")
+        print("Seleccione el tipo de algoritmo de ordenamiento:"
+              + "\n\t1. Insertion Sort"
+              + "\n\t2. Selection Sort"
+              + "\n\t3. Shell Sort"
+              + "\n\t4. Merge Sort"
+              + "\n\t5. Quick Sort\n")
         algoritmo = int(input("Seleccione una opción para continuar\n")[0])
         size = int(input("Indique tamaño de la muestra: "))
-        category = input("Seleccione la categoria a buscar: ")
-        country = input("Seleccione el pais a bucar: ")
+        # category = input("Seleccione la categoria a buscar: ")
+        # country = input("Seleccione el pais a bucar: ")
         num = int(input("Buscando los TOP?: "))
         if size <= lt.size(catalog['videos']):
             result = controller.sortVideos(catalog, size, algoritmo)
