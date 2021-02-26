@@ -27,9 +27,11 @@ header = "lista,algoritmo,datos,resultado"
 output_file = open(resultados_file, 'w')
 output_file.write(header)
 output_file.write('\n')
+output_file.close()
 j = 0
 print(j,'de', i, 'test completados', round((j/i)*100),'%')
 for test in input_file:
+    output_file = open(resultados_file, 'a')
     print('test:',j+1)
     lista = test['lista']
     size = int(test['datos'])
@@ -43,12 +45,15 @@ for test in input_file:
         result = controller.sortVideos(linked, size, algoritmo)
     intento = ",".join([str(lista), str(algoritmo), str(size), str(result[0])])
     print('Tiempo:',result[0],'ms.')
-    print("Guardando datos...\n")
+    print("Guardando datos...")
     output_file.write(intento)
     output_file.write('\n')
+    output_file.close()
+    print("Datos guardados...\n")
+
     j += 1
     print(j,'de', i, 'test completados', round((j/i)*100),'%')
 
-output_file.close()
+
 print("Finalizado.")
 
