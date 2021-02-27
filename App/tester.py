@@ -1,5 +1,7 @@
 import config as cf
 import sys
+default_limit = 1000
+sys.setrecursionlimit(default_limit*10)
 import controller
 import csv
 from DISClib.ADT import list as lt
