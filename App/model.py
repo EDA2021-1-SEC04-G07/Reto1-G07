@@ -142,15 +142,15 @@ def sortVideos(catalog: dict, size: int, algoritmo: int) -> tuple:
     sub_list = sub_list.copy()
     start_time = time.process_time()
     if int(algoritmo) == 1:
-        sorted_list = sel.sort(sub_list, cmpVideosByViews)
-    elif int(algoritmo) == 2:
         sorted_list = ins.sort(sub_list, cmpVideosByViews)
+    elif int(algoritmo) == 2:
+        sorted_list = sel.sort(sub_list, cmpVideosByViews)
     elif int(algoritmo) == 3:
         sorted_list = sa.sort(sub_list, cmpVideosByViews)
     elif int(algoritmo) == 4:
-        sorted_list = merge.sort(sub_list, cmpVideosByViews)
-    else:
         sorted_list = quick.sort(sub_list, cmpVideosByViews)
+    else:
+        sorted_list = merge.sort(sub_list, cmpVideosByViews)
     stop_time = time.process_time()
     elapsed_time_mseg = (stop_time - start_time)*1000
     return elapsed_time_mseg, sorted_list
