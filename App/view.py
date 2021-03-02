@@ -22,6 +22,8 @@
 
 import config as cf
 import sys
+default_limit = 1000
+sys.setrecursionlimit(default_limit*10)
 import controller
 from DISClib.ADT import list as lt
 assert cf
@@ -120,8 +122,8 @@ while True:
               + "\n\t1. Insertion Sort"
               + "\n\t2. Selection Sort"
               + "\n\t3. Shell Sort"
-              + "\n\t4. Merge Sort"
-              + "\n\t5. Quick Sort\n")
+              + "\n\t4. Quick Sort"
+              + "\n\t5. Merge Sort\n")
         algoritmo = int(input("Seleccione una opción para continuar\n")[0])
         size = int(input("Indique tamaño de la muestra: "))
         # category = input("Seleccione la categoria a buscar: ")
