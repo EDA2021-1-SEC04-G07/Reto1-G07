@@ -33,7 +33,6 @@ output_file.close()
 j = 0
 print(j,'de', i, 'test completados', round((j/i)*100),'%')
 for test in input_file:
-    output_file = open(resultados_file, 'a')
     print('test:',j+1)
     lista = test['lista']
     size = int(test['datos'])
@@ -48,6 +47,7 @@ for test in input_file:
     intento = ",".join([str(lista), str(algoritmo), str(size), str(result[0])])
     print('Tiempo:',result[0],'ms.')
     print("Guardando datos...")
+    output_file = open(resultados_file, 'a')
     output_file.write(intento)
     output_file.write('\n')
     output_file.close()
