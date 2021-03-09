@@ -80,12 +80,17 @@ def sortVideos(catalog: dict, algorithm: int = 5):
     """
     return model.sortVideos(catalog, algorithm)
 
+def sortVideosByTrend(catalog: dict):
+    """
+    Ordena los videos por dias en trending.
+    """
+    return model.sortVideosByTrend(catalog)
 
 # Funciones de consulta sobre el catálogo
 
 def getVideosByCountry(catalog, country_name):
     """
-    Retrona los videos por pais
+    Retorna los videos por pais
     """
     country = model.getVideosByCountry(catalog, country_name)
     return country
@@ -97,7 +102,10 @@ def findCategory(catalog, category_name):
 
 def getVideosByCategory(catalog, category_id):
     """
-    Retrona los videos por pais
+    Retorna los videos por pais
     """
     cat = model.getVideosByCategory(catalog, category_id)
     return cat
+
+def calcTrendingDays(catalog):
+    return model.calcTrendingDays(catalog)

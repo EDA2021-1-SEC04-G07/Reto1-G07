@@ -132,8 +132,17 @@ while True:
         # call to controller
 
     elif int(inputs[0]) == 4:
-        category = input("Seleccione la categoria a buscar: ")
-        # call to controller
+        category_name = input("Seleccione la categoria a buscar: ")
+        category_id = controller.findCategory(catalog, category_name)
+        category = controller.getVideosByCategory(catalog, int(category_id))
+        trend = controller.calcTrendingDays(category)
+        result = controller.sortVideosByTrend(trend)
+        first_vid = lt.firstElement(result[1])
+        print("El video que más días estuvo en trending para la categoría " + '"' + category_name + '" fue:')
+        print("\t Titulo:", first_vid['title'])
+        print("\t Nombre del canal:", first_vid['channel_title'])
+        print("\t ID de categoria:", first_vid['category_id'])
+        print("\t Días en trending:", first_vid['trending_total'])
 
     elif int(inputs[0]) == 5:
         country = input("Seleccione el pais a bucar: ")

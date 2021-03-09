@@ -146,13 +146,22 @@ def getVideosByCategory(catalog, category_id):
             lt.addLast(dict_category['videos'], item)
     return dict_category
 
-    '''
-    index = lt.isPresent(catalog['countries'], category_name)
-    if index > 0:
-        country = lt.getElement(catalog['countries'], index)
-        return country
-    return None
-    '''
+def calcTrendingDays(catalog):
+    trending = {}
+    trending['videos'] = lt.newList('ARRAY_LIST', cmpfunction=cmpVideosById, key='title')
+    result = {}
+    result['videos'] = lt.newList('ARRAY_LIST')
+    for video in lt.iterator(catalog['videos']):
+        index = lt.isPresent(trending['videos'], video)
+        if index > 0:
+            item = lt.getElement(result['videos'], index)
+            item['trending_total'] += 1
+            lt.changeInfo(result['videos'], index, item)
+        else:
+            lt.addLast(trending['videos'],video)
+            video['trending_total'] = 1
+            lt.addLast(result['videos'], video)
+    return result
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
@@ -164,6 +173,22 @@ def cmpVideosByViews(video1: dict, video2: dict) -> bool:
     video2: informacion del segundo video que incluye su valor 'views'
     """
     return (int(video1["views"]) > int(video2["views"]))
+
+def cmpVideosById(video1, video2):
+    if video1 == video2:
+        return 0
+    return -1
+
+def cmpVideosByTrendingDays(video1: dict, video2: dict) -> bool:
+    """
+    Devuelve verdadero (True) si los 'trending_total' de video1 son mayores que los del video2
+    Args:
+    video1: informacion del primer video que incluye su valor 'trending_total'
+    video2: informacion del segundo video que incluye su valor 'trending_total'
+    """
+    return (int(video1["trending_total"]) > int(video2["trending_total"]))
+
+
 
 
 def compare_country(country_name: str, country: dict) -> bool:
@@ -189,6 +214,15 @@ def sortVideos(catalog: dict, algorithm: int) -> tuple:
         sorted_list = quick.sort(sub_list, cmpVideosByViews)
     else:
         sorted_list = merge.sort(sub_list, cmpVideosByViews)
+    stop_time = time.process_time()
+    elapsed_time_mseg = (stop_time - start_time)*1000
+    return elapsed_time_mseg, sorted_list
+
+def sortVideosByTrend(catalog: dict) -> tuple:
+    sub_list = catalog['videos']
+    sub_list = sub_list.copy()
+    start_time = time.process_time()
+    sorted_list = merge.sort(sub_list, cmpVideosByTrendingDays)
     stop_time = time.process_time()
     elapsed_time_mseg = (stop_time - start_time)*1000
     return elapsed_time_mseg, sorted_list
