@@ -109,3 +109,5 @@ def getVideosByCategory(catalog, category_id):
 
 def calcTrendingDays(catalog):
     return model.calcTrendingDays(catalog)
+def getTrendingVideo(catalog: dict) -> tuple:
+    return model.getTrendingVideo(catalog)
