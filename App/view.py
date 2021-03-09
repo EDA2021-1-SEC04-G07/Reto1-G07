@@ -75,8 +75,6 @@ def printResults(ord_videos, sample=10):
             print("\t Vistas:", video['views'])
             print("\t Me gusta:", video['likes'])
             print("\t No me gusta:", video['dislikes'])
-            print("\t Pais:", video['country'])
-            print("\t Categoria:", video['category_id'])
             print()
             i += 1
 
