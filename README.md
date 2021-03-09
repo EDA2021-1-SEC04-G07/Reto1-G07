@@ -16,5 +16,5 @@ Este directorio contiene todo el código de base que se entrega para el funciona
 -Test
 Este directorio contiene las pruebas realizadas a los TADs, Estructuras de Datos y Algoritmos.
 
-Req. 2 - Abel Arismendy, 202020625, a.arismendy@uniandes.edu.co
-Req. 3 - Esteban Gonzalez, 202021225, e.gonzalez5@uniandes.edu.co
+Req. 2 - Esteban Gonzalez, 202021225, e.gonzalez5@uniandes.edu.co
+Req. 3 - Abel Arismendy, 202020625, a.arismendy@uniandes.edu.co
