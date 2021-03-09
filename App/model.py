@@ -124,6 +124,19 @@ def findCategory(catalog, category_name):
             return category['id']
     return None
 
+def findTag(catalog, tag_name):
+    videos_tag = {}
+    videos_tag['videos'] = lt.newList('ARRAY_LIST')
+    for video in lt.iterator(catalog['videos']):
+        tags = video['tags'].replace('"', '')
+        tag_list = tags.split('|')
+        for tag in tag_list:
+            if tag_name in tag:
+                lt.addLast(videos_tag['videos'], video)
+                break
+    return videos_tag
+
+
 
 def getVideosByCountry(catalog, country_name):
     """
@@ -196,6 +209,15 @@ def cmpVideosByViews(video1: dict, video2: dict) -> bool:
     """
     return (int(video1["views"]) > int(video2["views"]))
 
+def cmpVideosByLikes(video1: dict, video2: dict) -> bool:
+    """
+    Devuelve verdadero (True) si los 'likes' de video1 son mayores que los del video2
+    Args:
+    video1: informacion del primer video que incluye su valor 'likes'
+    video2: informacion del segundo video que incluye su valor 'likes'
+    """
+    return (int(video1["likes"]) > int(video2["likes"]))
+
 def cmpVideosById(video1, video2):
     if video1 == video2:
         return 0
@@ -245,6 +267,15 @@ def sortVideosByTrend(catalog: dict) -> tuple:
     sub_list = sub_list.copy()
     start_time = time.process_time()
     sorted_list = merge.sort(sub_list, cmpVideosByTrendingDays)
+    stop_time = time.process_time()
+    elapsed_time_mseg = (stop_time - start_time)*1000
+    return elapsed_time_mseg, sorted_list
+
+def sortVideosByLikes(catalog: dict) -> tuple:
+    sub_list = catalog['videos']
+    sub_list = sub_list.copy()
+    start_time = time.process_time()
+    sorted_list = merge.sort(sub_list, cmpVideosByLikes)
     stop_time = time.process_time()
     elapsed_time_mseg = (stop_time - start_time)*1000
     return elapsed_time_mseg, sorted_list

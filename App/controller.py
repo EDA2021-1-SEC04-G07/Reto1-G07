@@ -79,6 +79,12 @@ def sortVideos(catalog: dict, algorithm: int = 5):
     Ordena los videos por views.
     """
     return model.sortVideos(catalog, algorithm)
+    
+def sortVideosByLikes(catalog: dict):
+    """
+    Ordena los videos por likes.
+    """
+    return model.sortVideosByLikes(catalog)
 
 def sortVideosByTrend(catalog: dict):
     """
@@ -111,3 +117,6 @@ def calcTrendingDays(catalog):
     return model.calcTrendingDays(catalog)
 def getTrendingVideo(catalog: dict) -> tuple:
     return model.getTrendingVideo(catalog)
+
+def findTag(catalog, tag_name):
+    return model.findTag(catalog, tag_name)

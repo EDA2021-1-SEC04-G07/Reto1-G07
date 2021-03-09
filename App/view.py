@@ -153,11 +153,28 @@ while True:
         print("\t Días en trending:", first_vid['trending_total'])
 
     elif int(inputs[0]) == 5:
-        country = input("Seleccione el pais a bucar: ")
-        num = input("Buscando los TOP?: ")
+        country_name = input("Seleccione el pais a bucar: ")
+        num = int(input("Buscando los TOP?: "))
         tag = input("Seleccione la etiqueta a buscar: ")
-        # call to controller
-
+        country = controller.getVideosByCountry(catalog, country_name)
+        videos_tag = controller.findTag(country, tag)
+        result = controller.sortVideosByLikes(videos_tag)
+        i = 1
+        print("Los {n} videos con más likes con el tag '{tag}' fueron:".format(n=num, tag=tag))
+        while i <= num:
+            first_vid = lt.getElement(result[1], i)
+            print("\t Titulo:", first_vid['title'])
+            print("\t Nombre del canal:", first_vid['channel_title'])
+            print("\t Fecha de publicación:", first_vid['publish_time'])
+            print("\t Vistas:", first_vid['views'])
+            print("\t Me gusta:", first_vid['likes'])
+            print("\t No me gusta:", first_vid['dislikes'])
+            print("\t Etiquetas:")
+            tags = first_vid['tags'].replace('"', '')
+            tag_list = tags.split('|')
+            for tag in tag_list:
+                print("\t\t", tag)
+            i += 1
     else:
         sys.exit(0)
 sys.exit(0)
