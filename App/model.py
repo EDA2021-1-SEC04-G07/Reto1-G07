@@ -50,12 +50,13 @@ def newCatalog(type: str) -> dict:
     """
     catalog = {
         'videos': None,
-        'categories': None
+        'categories': None,
+        'countries': None,
     }
 
     catalog['videos'] = lt.newList(type, cmpfunction=None)
     catalog['categories'] = lt.newList(type, cmpfunction=None)
-    # catalog['countries'] = lt.newList(type, cmpfunction=compare_country)
+    catalog['countries'] = lt.newList(type, cmpfunction=compare_country)
     return catalog
 
 
@@ -64,7 +65,7 @@ def newCatalog(type: str) -> dict:
 def addVideo(catalog: dict, video: dict) -> None:
     # Se adiciona el libro a la lista de libros
     lt.addLast(catalog['videos'], video)
-    # addVideoCountry(catalog, video['country'].strip(), video)
+    addVideoCountry(catalog, video['country'].strip(), video)
 
 
 def addCategory(catalog: dict, category: dict) -> None:
@@ -108,13 +109,50 @@ def newCountry(name: str) -> dict:
     """
     country = {
         'name': name,
-        'videos': lt.newList(),
+        'videos': lt.newList('ARRAY_LIST'),
     }
 
     return country
 
 
 # Funciones de consulta
+
+def findCategory(catalog, category_name):
+    for category in lt.iterator(catalog['categories']):
+        if category['name'].lower() == category_name.lower():
+            return category['id']
+    return None
+
+
+def getVideosByCountry(catalog, country_name):
+    """
+    Retorna un pais
+    """
+    index = lt.isPresent(catalog['countries'], country_name)
+    if index > 0:
+        country = lt.getElement(catalog['countries'], index)
+        return country
+    return None
+
+
+def getVideosByCategory(catalog, category_id):
+    """
+    Retorna videos de una categoria
+    """
+    dict_category = {}
+    dict_category['videos'] = lt.newList('ARRAY_LIST')
+    for item in lt.iterator(catalog['videos']):
+        if int(item['category_id']) == category_id:
+            lt.addLast(dict_category['videos'], item)
+    return dict_category
+
+    '''
+    index = lt.isPresent(catalog['countries'], category_name)
+    if index > 0:
+        country = lt.getElement(catalog['countries'], index)
+        return country
+    return None
+    '''
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
@@ -127,27 +165,27 @@ def cmpVideosByViews(video1: dict, video2: dict) -> bool:
     """
     return (int(video1["views"]) > int(video2["views"]))
 
-'''
+
 def compare_country(country_name: str, country: dict) -> bool:
     if country_name.lower() in country['name'].lower():
         return 0
     return -1
-'''
+
 
 # Funciones de ordenamiento
 
 
-def sortVideos(catalog: dict, size: int, algoritmo: int) -> tuple:
-    sub_list = lt.subList(catalog['videos'], 1, size)
+def sortVideos(catalog: dict, algorithm: int) -> tuple:
+    sub_list = catalog['videos']
     sub_list = sub_list.copy()
     start_time = time.process_time()
-    if int(algoritmo) == 1:
+    if int(algorithm) == 1:
         sorted_list = ins.sort(sub_list, cmpVideosByViews)
-    elif int(algoritmo) == 2:
+    elif int(algorithm) == 2:
         sorted_list = sel.sort(sub_list, cmpVideosByViews)
-    elif int(algoritmo) == 3:
+    elif int(algorithm) == 3:
         sorted_list = sa.sort(sub_list, cmpVideosByViews)
-    elif int(algoritmo) == 4:
+    elif int(algorithm) == 4:
         sorted_list = quick.sort(sub_list, cmpVideosByViews)
     else:
         sorted_list = merge.sort(sub_list, cmpVideosByViews)

@@ -74,11 +74,30 @@ def loadCategories(catalog: dict) -> None:
 # Funciones de ordenamiento
 
 
-def sortVideos(catalog: dict, size: int, algorithm: str):
+def sortVideos(catalog: dict, algorithm: int = 5):
     """
     Ordena los videos por views.
     """
-    return model.sortVideos(catalog, size, algorithm)
+    return model.sortVideos(catalog, algorithm)
 
 
 # Funciones de consulta sobre el catálogo
+
+def getVideosByCountry(catalog, country_name):
+    """
+    Retrona los videos por pais
+    """
+    country = model.getVideosByCountry(catalog, country_name)
+    return country
+
+
+def findCategory(catalog, category_name):
+    return model.findCategory(catalog, category_name)
+
+
+def getVideosByCategory(catalog, category_id):
+    """
+    Retrona los videos por pais
+    """
+    cat = model.getVideosByCategory(catalog, category_id)
+    return cat

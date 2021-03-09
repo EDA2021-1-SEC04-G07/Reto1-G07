@@ -64,7 +64,7 @@ def loadData(catalog):
 def printResults(ord_videos, sample=10):
     size = lt.size(ord_videos)
     if size > sample:
-        print("Los primeros ", sample, " videos según su número de vistas son:")
+        print("Los primeros ", sample, " videos según su número de vistas son:\n")
         i = 1
         while i <= sample:
             video = lt.getElement(ord_videos,i)
@@ -75,8 +75,10 @@ def printResults(ord_videos, sample=10):
             print("\t Vistas:", video['views'])
             print("\t Me gusta:", video['likes'])
             print("\t No me gusta:", video['dislikes'])
-            print("\n")
-            i+=1
+            print("\t Pais:", video['country'])
+            print("\t Categoria:", video['category_id'])
+            print()
+            i += 1
 
 
 catalog = None
@@ -118,24 +120,14 @@ while True:
             i += 1
 
     elif int(inputs[0]) == 2:
-        print("Seleccione el tipo de algoritmo de ordenamiento:"
-              + "\n\t1. Insertion Sort"
-              + "\n\t2. Selection Sort"
-              + "\n\t3. Shell Sort"
-              + "\n\t4. Quick Sort"
-              + "\n\t5. Merge Sort\n")
-        algoritmo = int(input("Seleccione una opción para continuar\n")[0])
-        size = int(input("Indique tamaño de la muestra: "))
-        # category = input("Seleccione la categoria a buscar: ")
-        # country = input("Seleccione el pais a bucar: ")
+        category_name = input("Seleccione la categoria a buscar: ")
+        country_name = input("Seleccione el pais a bucar: ")
         num = int(input("Buscando los TOP?: "))
-        if size <= lt.size(catalog['videos']):
-            result = controller.sortVideos(catalog, size, algoritmo)
-            print("Para la muestra de", size, " elementos, el tiempo (mseg) es: ", str(result[0]))
-            printResults(result[1], num)
-        else:
-            print("El tamaño de la muestra especificado es mayor al tamaño de la lista.")
-            print("Intentelo de nuevo.")
+        country = controller.getVideosByCountry(catalog, country_name)
+        category = controller.findCategory(catalog, category_name)
+        country_cat = controller.getVideosByCategory(country, int(category))
+        result = controller.sortVideos(country_cat)
+        printResults(result[1], num)
 
     elif int(inputs[0]) == 3:
         country = input("Seleccione el pais a bucar: ")
