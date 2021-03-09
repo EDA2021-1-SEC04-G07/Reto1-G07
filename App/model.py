@@ -88,7 +88,8 @@ def addVideoCountry(catalog: dict, country_name: str, video: dict) -> None:
         lt.addLast(catalog['countries'], country)
 
     lt.addLast(country['videos'], video)
-
+    # print(lt.size(country['videos']))
+    # print(country['name'])
 
 # Funciones para creacion de datos
 
@@ -146,13 +147,27 @@ def getVideosByCategory(catalog, category_id):
             lt.addLast(dict_category['videos'], item)
     return dict_category
 
-    '''
-    index = lt.isPresent(catalog['countries'], category_name)
-    if index > 0:
-        country = lt.getElement(catalog['countries'], index)
-        return country
-    return None
-    '''
+
+def getTrendingVideo(catalog: dict) -> tuple:
+    videos = {}
+    for video in lt.iterator(catalog):
+        if video['video_id'] not in videos:
+            videos[video['video_id']] = {
+                'video': video,
+                'trending_days': 0,
+            }
+
+        videos[video['video_id']]['trending_days'] += 1
+
+    video = None
+    maximum = 0
+    for key, value in videos.items():
+        if value['trending_days'] > maximum:
+            video = videos[key]['video']
+            maximum = value['trending_days']
+
+    return video, maximum
+
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 

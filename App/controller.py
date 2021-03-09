@@ -101,3 +101,6 @@ def getVideosByCategory(catalog, category_id):
     """
     cat = model.getVideosByCategory(catalog, category_id)
     return cat
+
+def getTrendingVideo(catalog: dict) -> tuple:
+    return model.getTrendingVideo(catalog)

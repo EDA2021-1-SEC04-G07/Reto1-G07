@@ -128,8 +128,16 @@ while True:
         printResults(result[1], num)
 
     elif int(inputs[0]) == 3:
-        country = input("Seleccione el pais a bucar: ")
-        # call to controller
+        country_name = input("Seleccione el pais a bucar: ")
+        country = controller.getVideosByCountry(catalog, country_name)
+        country = controller.sortVideos(country)
+        video = controller.getTrendingVideo(country[1])
+        print()
+        print("\t Titulo:", video[0]['title'])
+        print("\t Nombre del canal:", video[0]['channel_title'])
+        print("\t Pais:", video[0]['country'])
+        print("\t Numero de dias:", video[1])
+        print()
 
     elif int(inputs[0]) == 4:
         category = input("Seleccione la categoria a buscar: ")
