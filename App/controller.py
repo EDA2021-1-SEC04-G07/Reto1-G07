@@ -103,18 +103,21 @@ def getVideosByCountry(catalog, country_name):
 
 
 def findCategory(catalog, category_name):
+    """Encuentra el id de la categoría según el nombre y lo retorna."""
     return model.findCategory(catalog, category_name)
 
 
 def getVideosByCategory(catalog, category_id):
     """
-    Retorna los videos por pais
+    Retorna los videos por categoria a partir de su id
     """
     cat = model.getVideosByCategory(catalog, category_id)
     return cat
 
 def calcTrendingDays(catalog):
+    """Calcula los días que estuvieron en trending los videos y retorna una nueva TAD lista con este nuevo dato ('trending_total')."""
     return model.calcTrendingDays(catalog)
+
 def getTrendingVideo(catalog: dict) -> tuple:
     return model.getTrendingVideo(catalog)
 

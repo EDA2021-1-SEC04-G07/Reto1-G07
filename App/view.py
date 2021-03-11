@@ -62,6 +62,7 @@ def loadData(catalog):
 
 
 def printResults(ord_videos, sample=10):
+    """Imprime los 'sample' videos para el requerimiento 1"""
     size = lt.size(ord_videos)
     if size > sample:
         print("Los primeros ", sample, " videos según su número de vistas son:\n")

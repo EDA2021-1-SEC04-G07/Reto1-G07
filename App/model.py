@@ -45,7 +45,7 @@ los mismos.
 def newCatalog(type: str) -> dict:
     """
     Inicializa el catálogo de videos. Crea una lista vacia para guardar
-    todos los videos, adicionalmente, crea una lista vacia para las categorias.
+    todos los videos, adicionalmente, crea una lista vacia para las categorias y otra para los paises.
     Retorna el catalogo inicializado.
     """
     catalog = {
@@ -118,13 +118,15 @@ def newCountry(name: str) -> dict:
 
 # Funciones de consulta
 
-def findCategory(catalog, category_name):
+def findCategory(catalog:dict, category_name:str)->str:
+    """Encuentra el id de la categoría según el nombre y lo retorna."""
     for category in lt.iterator(catalog['categories']):
         if category['name'].lower() == category_name.lower():
             return category['id']
     return None
 
-def findTag(catalog, tag_name):
+def findTag(catalog:dict, tag_name:str)->dict:
+    """Encuentra todos los videos que contienen 'tag_name' en sus tags, según el catalogo dado."""
     videos_tag = {}
     videos_tag['videos'] = lt.newList('ARRAY_LIST')
     for video in lt.iterator(catalog['videos']):
@@ -138,9 +140,9 @@ def findTag(catalog, tag_name):
 
 
 
-def getVideosByCountry(catalog, country_name):
+def getVideosByCountry(catalog:dict, country_name:str)->dict:
     """
-    Retorna un pais
+    Retorna todos los videos de un pais.
     """
     index = lt.isPresent(catalog['countries'], country_name)
     if index > 0:
@@ -149,9 +151,9 @@ def getVideosByCountry(catalog, country_name):
     return None
 
 
-def getVideosByCategory(catalog, category_id):
+def getVideosByCategory(catalog:dict, category_id:int)->dict:
     """
-    Retorna videos de una categoria
+    Retorna todos los videos de una categoria.
     """
     dict_category = {}
     dict_category['videos'] = lt.newList('ARRAY_LIST')
@@ -160,7 +162,8 @@ def getVideosByCategory(catalog, category_id):
             lt.addLast(dict_category['videos'], item)
     return dict_category
 
-def calcTrendingDays(catalog):
+def calcTrendingDays(catalog:dict)->dict:
+    """Calcula los días que estuvieron en trending los videos y retorna una nueva TAD lista con este nuevo dato ('trending_total')."""
     trending = {}
     trending['videos'] = lt.newList('ARRAY_LIST', cmpfunction=cmpVideosById, key='title')
     result = {}
@@ -218,7 +221,13 @@ def cmpVideosByLikes(video1: dict, video2: dict) -> bool:
     """
     return (int(video1["likes"]) > int(video2["likes"]))
 
-def cmpVideosById(video1, video2):
+def cmpVideosById(video1:dict, video2:dict)->int:
+    """
+    Devuelve 0 si el 'key' de video1 es igual al 'key' del video2
+    Args:
+    video1: informacion del primer video que incluye su valor 'key'
+    video2: informacion del segundo video que incluye su valor 'key'
+    """
     if video1 == video2:
         return 0
     return -1
@@ -235,7 +244,7 @@ def cmpVideosByTrendingDays(video1: dict, video2: dict) -> bool:
 
 
 
-def compare_country(country_name: str, country: dict) -> bool:
+def compare_country(country_name: str, country: dict) -> int:
     if country_name.lower() in country['name'].lower():
         return 0
     return -1
