@@ -22,6 +22,8 @@
 
 import config as cf
 import sys
+import time
+import tracemalloc
 default_limit = 1000
 sys.setrecursionlimit(default_limit*10)
 import controller
@@ -58,7 +60,7 @@ def loadData(catalog):
     """
     Carga los videos en la estructura de datos
     """
-    controller.loadData(catalog)
+    return controller.loadData(catalog)
 
 
 def printResults(ord_videos, sample=10):
@@ -100,7 +102,9 @@ while True:
 
         catalog = initCatalog(list_type)
         print("Cargando información de los archivos ....")
-        loadData(catalog)
+        run_data = loadData(catalog)
+        print("Time taken:", run_data[0])
+        print("Memory taken:", run_data[1])
         print('Videos cargados: ' + str(lt.size(catalog['videos'])))
         print("Primer video:")
         first_vid = lt.firstElement(catalog['videos'])
@@ -122,18 +126,64 @@ while True:
         category_name = input("Seleccione la categoria a buscar: ")
         country_name = input("Seleccione el pais a bucar: ")
         num = int(input("Buscando los TOP?: "))
+
+
+        delta_time = -1.0
+        delta_memory = -1.0
+        tracemalloc.start()
+        start_time = controller.getTime()
+        start_memory = controller.getMemory()
+
+
         country = controller.getVideosByCountry(catalog, country_name)
         category = controller.findCategory(catalog, category_name)
         country_cat = controller.getVideosByCategory(country, int(category))
         result = controller.sortVideos(country_cat)
+
+
+        stop_memory = controller.getMemory()
+        stop_time = controller.getTime()
+
+        # finaliza el procesos para medir memoria
+        tracemalloc.stop()
+
+        # calculando la diferencia de tiempo y memoria
+        delta_time = stop_time - start_time
+        delta_memory = controller.deltaMemory(start_memory, stop_memory)
+
+
         printResults(result[1], num)
+        print("Time taken:", delta_time)
+        print("Memory taken:", delta_memory)
 
     elif int(inputs[0]) == 3:
         country_name = input("Seleccione el pais a bucar: ")
+
+
+        delta_time = -1.0
+        delta_memory = -1.0
+        tracemalloc.start()
+        start_time = controller.getTime()
+        start_memory = controller.getMemory()
+
+
         country = controller.getVideosByCountry(catalog, country_name)
         country = controller.sortVideos(country)
         video = controller.getTrendingVideo(country[1])
+
+
+        stop_memory = controller.getMemory()
+        stop_time = controller.getTime()
+
+        # finaliza el procesos para medir memoria
+        tracemalloc.stop()
+
+        # calculando la diferencia de tiempo y memoria
+        delta_time = stop_time - start_time
+        delta_memory = controller.deltaMemory(start_memory, stop_memory)
         print()
+        print("Time taken:", delta_time)
+        print("Memory taken:", delta_memory)
         print("\t Titulo:", video[0]['title'])
         print("\t Nombre del canal:", video[0]['channel_title'])
         print("\t Pais:", video[0]['country'])
@@ -142,11 +192,33 @@ while True:
 
     elif int(inputs[0]) == 4:
         category_name = input("Seleccione la categoria a buscar: ")
+        
+        delta_time = -1.0
+        delta_memory = -1.0
+        tracemalloc.start()
+        start_time = controller.getTime()
+        start_memory = controller.getMemory()
+
+
         category_id = controller.findCategory(catalog, category_name)
         category = controller.getVideosByCategory(catalog, int(category_id))
         trend = controller.calcTrendingDays(category)
         result = controller.sortVideosByTrend(trend)
         first_vid = lt.firstElement(result[1])
+
+
+        stop_memory = controller.getMemory()
+        stop_time = controller.getTime()
+
+        # finaliza el procesos para medir memoria
+        tracemalloc.stop()
+
+        # calculando la diferencia de tiempo y memoria
+        delta_time = stop_time - start_time
+        delta_memory = controller.deltaMemory(start_memory, stop_memory)
+
+        print("Time taken:", delta_time)
+        print("Memory taken:", delta_memory)
         print("El video que más días estuvo en trending para la categoría " + '"' + category_name + '" fue:')
         print("\t Titulo:", first_vid['title'])
         print("\t Nombre del canal:", first_vid['channel_title'])
@@ -157,9 +229,29 @@ while True:
         country_name = input("Seleccione el pais a bucar: ")
         num = int(input("Buscando los TOP?: "))
         tag = input("Seleccione la etiqueta a buscar: ")
+        delta_time = -1.0
+        delta_memory = -1.0
+        tracemalloc.start()
+        start_time = controller.getTime()
+        start_memory = controller.getMemory()
+
+
         country = controller.getVideosByCountry(catalog, country_name)
         videos_tag = controller.findTag(country, tag)
         result = controller.sortVideosByLikes(videos_tag)
+
+
+        stop_memory = controller.getMemory()
+        stop_time = controller.getTime()
+
+        # finaliza el procesos para medir memoria
+        tracemalloc.stop()
+
+        # calculando la diferencia de tiempo y memoria
+        delta_time = stop_time - start_time
+        delta_memory = controller.deltaMemory(start_memory, stop_memory)
+        print("Time taken:", delta_time)
+        print("Memory taken:", delta_memory)
         i = 1
         print("Los {n} videos con más likes con el tag '{tag}' fueron:".format(n=num, tag=tag))
         while i <= num:
